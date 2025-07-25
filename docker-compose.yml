@@ -36,12 +36,28 @@ services:
     networks:
       - app-network
 
+  api-gateway:
+    build:
+      context: ./back/api-gateway
+    container_name: api-gateway-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back/api-gateway:/var/www
+      - /var/www/vendor
+    networks:
+      - app-network
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:your_app_key           
+
   security-service:
     build:
       context: ./back/security-service
     container_name: security-service-container
     ports:
-      - "8000:8000"
+      - "8010:8000"
     volumes:
       - ./back/security-service:/var/www
       - /var/www/vendor

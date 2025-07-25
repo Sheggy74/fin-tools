@@ -47,12 +47,26 @@ services:
       - /var/www/vendor
     networks:
       - app-network
-      - shared_network
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
       - APP_KEY=base64:your_app_key           
 
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: changeme
+    volumes:
+      - "./rabbitmq_data:/var/lib/rabbitmq"
+    networks:
+      - app-network
+      - shared_network      
+    
 networks:
   app-network:
     driver: bridge

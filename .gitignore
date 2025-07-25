@@ -4,3 +4,6 @@ vendor
 cache
 elk/docker_volumes
 elk/.env
+edit.bat
+rabbitmq_data
+back/composer.lock

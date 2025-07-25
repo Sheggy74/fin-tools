@@ -4,6 +4,8 @@ namespace App\Services\LogService;
 
 use DateTime;
 use DateTimeZone;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\HttpClient\CurlHttpClient;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\NativeHttpClient;
@@ -20,16 +22,21 @@ class LogService
     }
 
     public function info($message){
-        $this->httpClient->request('POST',$this->url,[
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-            'body' => json_encode([
-                'message' => $message,
-                'service' => 'security_service',
-                'user' => 'user',
-               // 'timestamp' => (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d\TH:i:s\Z')
-            ])
-        ]);
+        $this->log('info', $message);
+    }
+
+    private function log(string $logLevel, string $message){
+        $connection = new AMQPStreamConnection('rabbitmq',5672,'user','changeme');
+        $channel =  $connection->channel();
+        $channel->queue_declare('log_queue', false, true, false, false);
+        $msg = new AMQPMessage(json_encode([
+            'message' => $message,
+            'service' => 'security_service',
+            'user' => 'user',
+            'log_level' => $logLevel
+        ]));
+        $channel->basic_publish($msg, '', 'log_queue');
+        $channel->close();
+        $connection->close();
     }
 }

@@ -2,3 +2,5 @@
 node_modules
 vendor
 cache
+elk/docker_volumes
+elk/.env

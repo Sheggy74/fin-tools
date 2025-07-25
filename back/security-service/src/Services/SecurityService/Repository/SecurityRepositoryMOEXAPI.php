@@ -2,22 +2,14 @@
 
 namespace App\Services\SecurityService\Repository;
 
-use App\Services\LogService\LogService;
 use App\Services\SecurityService\UseCases\XmlToDTOConverter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SecurityRepositoryMOEXAPI implements ISecurityRepository
 {
     private string $apiUrl;
-    private LogService $logService;
 
     public function __construct(
         private LoggerInterface     $logger,
@@ -26,14 +18,13 @@ class SecurityRepositoryMOEXAPI implements ISecurityRepository
     )
     {
         $this->apiUrl = $_ENV['MOEX_URL'] . '/securities';
-        $this->logService = new LogService();
     }
 
     public function getSecurities(string $query): ArrayCollection
     {
         $url = $this->apiUrl . ($query ? '?q=' . $query : '');
         try {
-            $this->logService->info("Получение списка ценных бумаг по запросу: \"$query\"");
+            $this->logger->info("Получение списка ценных бумаг по запросу: \"$query\"");
             $res = $this->http->request('GET', $url);
             return $this->xmlToDTOConverter->convert($res->getContent());
         } catch (\Exception $e) {

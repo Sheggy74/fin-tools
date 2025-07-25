@@ -25,3 +25,9 @@ services:
     App\Services\SecurityService\Repository.ISecurityRepository:
         alias: App\Services\SecurityService\Repository\SecurityRepositoryMOEXAPI
         public: true
+
+    app.rabbitmq_logger:
+        class: App\Services\LogService\LogService
+
+    Psr\Log\LoggerInterface:
+        alias: app.rabbitmq_logger

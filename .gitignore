@@ -7,3 +7,4 @@ elk/.env
 edit.bat
 rabbitmq_data
 back/composer.lock
+back/security-service/.env

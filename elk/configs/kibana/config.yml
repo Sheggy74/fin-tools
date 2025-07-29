@@ -5,4 +5,4 @@ monitoring.ui.container.elasticsearch.enabled: true # Для корректно�
 
 elasticsearch.hosts: [ "http://es:9200" ]
 elasticsearch.username: kibana_system
-elasticsearch.password: WfdaD+OjiHe4X4nRgwY0
+elasticsearch.password: SjFIUp05RQuFdddlCnQf

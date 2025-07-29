@@ -46,11 +46,7 @@ services:
       - ./back/api-gateway:/var/www
       - /var/www/vendor
     networks:
-      - app-network
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - APP_KEY=base64:your_app_key           
+      - app-network      
 
   security-service:
     build:
@@ -62,11 +58,7 @@ services:
       - ./back/security-service:/var/www
       - /var/www/vendor
     networks:
-      - app-network
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - APP_KEY=base64:your_app_key           
+      - app-network       
 
   rabbitmq:
     image: rabbitmq:management

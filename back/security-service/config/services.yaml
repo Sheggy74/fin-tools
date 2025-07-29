@@ -31,3 +31,6 @@ services:
 
     Psr\Log\LoggerInterface:
         alias: app.rabbitmq_logger
+
+    App\Serializer\CustomSerializer:
+        public: true

@@ -22,7 +22,7 @@ class SecurityService
     {
         $data = $this->repository->getSecurities($query);
 
-        return ['data' => array_map(fn(SecurityDTO $item) => $item->toArray(),$data->toArray())];
+        return array_map(fn(SecurityDTO $item) => $item->toArray(),$data->toArray());
     }
 
 }

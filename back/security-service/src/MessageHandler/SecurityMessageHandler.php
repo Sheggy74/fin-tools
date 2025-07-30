@@ -22,21 +22,22 @@ class SecurityMessageHandler
     public function __invoke(SecurityMessage $message)
     {
 //
-        $data = $message->getData()['body'];
+        $data = json_decode($message->getData()['body'],true);
 //
-        $this->logger->info(sprintf('Отбираем ценные бумаги по запросу: %s', $data['query']));
+        $logMessage = sprintf('Отбираем ценные бумаги по запросу: %s', $data['query']);
+        $this->logger->info($logMessage);
 
 
 
 
-        if (!empty($message['reply_queue']))
+        if (!empty($data['reply_queue']))
         {
             $connection = new AMQPStreamConnection('rabbitmq', 5672, $_ENV['RABBITMQ_USER'], $_ENV['RABBITMQ_PASS']);
 //
             $channel = $connection->channel();
-            $response = $this->service->getSecurities($data['query']);
-            $channel->basic_publish(new AMQPMessage($response, [
-                'correlation_id' => $message['correlation_id']]), '', $message['reply_queue']);
+            $response = $this->securityService->getSecurities($data['query']);
+            $channel->basic_publish(new AMQPMessage(json_encode($response), [
+                'correlation_id' => $data['correlation_id']]), '', $data['reply_queue']);
             $channel->close();
             $connection->close();
         }

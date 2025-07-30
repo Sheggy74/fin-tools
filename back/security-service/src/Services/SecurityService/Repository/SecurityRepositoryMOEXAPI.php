@@ -24,7 +24,6 @@ class SecurityRepositoryMOEXAPI implements ISecurityRepository
     {
         $url = $this->apiUrl . ($query ? '?q=' . $query : '');
         try {
-            $this->logger->info("Получение списка ценных бумаг по запросу: \"$query\"");
             $res = $this->http->request('GET', $url);
             return $this->xmlToDTOConverter->convert($res->getContent());
         } catch (\Exception $e) {

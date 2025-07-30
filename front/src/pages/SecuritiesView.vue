@@ -67,7 +67,7 @@ import axios from "axios";
 const data = ref([])
 const loading = ref(false)
 const error = ref(null)
-const url = 'http://localhost:8000/security'
+const url = 'http://localhost:8000/api/security'
 const searchString = ref('');
 const headers = [
     {title: 'Идентификатор', key: 'id'},

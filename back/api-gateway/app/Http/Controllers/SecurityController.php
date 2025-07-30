@@ -29,7 +29,7 @@ class SecurityController extends Controller
             }
         };
 
-        $channel->basic_consume($replyQueueName, '', false, true, false, false, $callback);
+
 
         $messageData = [
             'query' => $request->input('query'),
@@ -41,6 +41,7 @@ class SecurityController extends Controller
         ]);
 
         $channel->basic_publish($msg, '', $queueName);
+        $channel->basic_consume($replyQueueName, '', false, true, false, false, $callback);
 
         while (!$response) {
             $channel->wait();

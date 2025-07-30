@@ -18,11 +18,11 @@ class SecurityService
         $this->repository = $repository;
     }
 
-    public function getSecurities(string $query): JsonResponse
+    public function getSecurities(string $query): array
     {
         $data = $this->repository->getSecurities($query);
 
-        return new JsonResponse(['data' => array_map(fn(SecurityDTO $item) => $item->toArray(),$data->toArray())], Response::HTTP_OK);
+        return ['data' => array_map(fn(SecurityDTO $item) => $item->toArray(),$data->toArray())];
     }
 
 }
